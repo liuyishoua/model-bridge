@@ -1,0 +1,42 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "Leo Model API", "version": "1.0.0", "description": "Public model access through Open WebUI, Tailscale and a private GPU host. Supports model listing and Chat Completions, including SSE streaming. Model management requires a separate administrator login in Open WebUI." },
+  "servers": [{ "url": "https://d.58nft.net" }, { "url": "https://43.172.70.56", "description": "Original IP entrance" }],
+  "security": [{ "ApiKey": [] }],
+  "paths": {
+    "/v1/models": {
+      "get": {
+        "operationId": "listModels",
+        "summary": "List models available to this user",
+        "responses": {
+          "200": { "description": "Open WebUI model list", "content": { "application/json": { "schema": { "type": "object", "properties": { "data": { "type": "array", "items": { "type": "object", "required": ["id"], "properties": { "id": { "type": "string" }, "name": { "type": "string" } }, "additionalProperties": true } } } } } } },
+          "401": { "description": "Missing or invalid API Key" }, "403": { "description": "API Key endpoint is not permitted" }
+        }
+      }
+    },
+    "/v1/chat/completions": {
+      "post": {
+        "operationId": "chatCompletion",
+        "summary": "Generate a reply using the private GPU host",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ChatRequest" }, "example": { "model": "leo-gpt-oss:20b", "messages": [{ "role": "user", "content": "你好" }], "stream": false, "max_tokens": 512 } } } },
+        "responses": {
+          "200": { "description": "Chat completion JSON, or SSE data events ending with [DONE] when stream=true", "content": { "application/json": { "schema": { "type": "object", "properties": { "choices": { "type": "array", "items": { "type": "object", "properties": { "message": { "type": "object", "properties": { "role": { "type": "string" }, "content": { "type": ["string", "null"] } }, "additionalProperties": true } }, "additionalProperties": true } }, "usage": { "type": "object", "additionalProperties": true } }, "additionalProperties": true } }, "text/event-stream": { "schema": { "type": "string" } } } },
+          "400": { "description": "Invalid request or model error" }, "401": { "description": "Missing or invalid API Key" }, "403": { "description": "User lacks permission for the requested model" }, "429": { "description": "GPU host busy; retry later" }, "500": { "description": "Provider failure" }, "503": { "description": "Model host offline or unavailable" }, "504": { "description": "Inference timed out" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": { "ApiKey": { "type": "http", "scheme": "bearer", "description": "Personal Open WebUI API Key; never use the host bridge token on public clients" } },
+    "schemas": {
+      "ChatRequest": {
+        "type": "object", "required": ["model", "messages"],
+        "properties": {
+          "model": { "type": "string", "default": "leo-gpt-oss:20b" },
+          "messages": { "type": "array", "minItems": 1, "items": { "type": "object", "required": ["role"], "properties": { "role": { "type": "string", "enum": ["system", "developer", "user", "assistant", "tool"] }, "content": { "type": ["string", "array", "null"] } }, "additionalProperties": true } },
+          "stream": { "type": "boolean", "default": false }, "temperature": { "type": "number", "minimum": 0, "maximum": 2 }, "max_tokens": { "type": "integer", "minimum": 1 }, "reasoning_effort": { "type": "string", "enum": ["low", "medium", "high"] }
+        }, "additionalProperties": true
+      }
+    }
+  }
+}

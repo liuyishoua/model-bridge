@@ -1,0 +1,42 @@
+{
+  "ollama": {
+    "version": "v0.35.1",
+    "source": "https://github.com/ollama/ollama",
+    "release": "https://github.com/ollama/ollama/releases/download/v0.35.1/ollama-windows-amd64.zip",
+    "installed_backends": ["cuda_v12", "vulkan"]
+  },
+  "open_webui": {
+    "version": "v0.11.4",
+    "source": "https://github.com/open-webui/open-webui",
+    "image": "ghcr.io/open-webui/open-webui@sha256:e8adae70e1db7a838d5d6cdfe2a66a4c1d293a0361b304ccc20df179b17aeead",
+    "variant": "main-slim"
+  },
+  "llama_cpp": {
+    "source": "https://github.com/ggml-org/llama.cpp",
+    "commit": "2e7c58c5477478c8cf6e199cfaa5dcd5a4319c81"
+  },
+  "model": {
+    "source_directory": "../models/gpt-oss-20b",
+    "ollama_id": "leo-gpt-oss:20b",
+    "gguf_bytes": 13792638720,
+    "gguf_sha256": "0afcd9034e11245135b4a965ffd84d58a0eb9773322c83f36535278492313b48",
+    "expert_quantization": "MXFP4",
+    "chat_template_source": "https://registry.ollama.ai/v2/library/gpt-oss/manifests/20b"
+  },
+  "caddy": {
+    "version": "v2.11.4",
+    "source": "https://github.com/caddyserver/caddy",
+    "route_owner": "leo-model-bridge",
+    "public_domain": "d.58nft.net",
+    "domain_site_owner": "d.58nft.net"
+  },
+  "tailscale": {
+    "source": "https://github.com/tailscale/tailscale",
+    "forwarding": "TCP 8787 to GPU-host loopback 8787"
+  },
+  "browser_acceptance": {
+    "source": "https://github.com/microsoft/playwright-python",
+    "version": "1.63.0",
+    "image": "mcr.microsoft.com/playwright/python:v1.63.0-noble@sha256:72bd171a9ffc2b4b59532aaa6210e21014d07093120dc25528870c0b840da1f0"
+  }
+}

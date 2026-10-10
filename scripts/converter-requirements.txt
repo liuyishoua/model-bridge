@@ -1,0 +1,10 @@
+# Compatibility set verified with this host's Python 3.9 / existing torch 2.1 CPU.
+# Install inside .runtime/converter-venv, never into the base Anaconda environment.
+numpy==1.26.4
+transformers==4.55.4
+sentencepiece==0.2.0
+protobuf==4.25.8
+scipy==1.13.1
+scikit-learn==1.6.1
+safetensors==0.7.0
+tiktoken==0.14.0

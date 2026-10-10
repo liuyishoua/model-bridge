@@ -1,0 +1,55 @@
+name: leo-model-bridge
+services:
+  open-webui:
+    image: ${WEBUI_IMAGE:?Pin a tested image digest in cloud.env}
+    container_name: leo-model-webui
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${WEBUI_PORT:-8788}:8080"
+    environment:
+      WEBUI_URL: ${WEBUI_URL:?Set the public HTTPS URL}
+      WEBUI_SECRET_KEY: ${WEBUI_SECRET_KEY:?Generate a secret}
+      WEBUI_ADMIN_EMAIL: ${WEBUI_ADMIN_EMAIL:?Set the initial admin email}
+      WEBUI_ADMIN_PASSWORD: ${WEBUI_ADMIN_PASSWORD:?Set the initial admin password}
+      WEBUI_ADMIN_NAME: Leo
+      WEBUI_AUTH: "true"
+      ENABLE_SIGNUP: "false"
+      ENABLE_API_KEYS: "true"
+      ENABLE_API_KEYS_ENDPOINT_RESTRICTIONS: "true"
+      API_KEYS_ALLOWED_ENDPOINTS: "/api/models,/api/chat/completions"
+      ENABLE_OLLAMA_API: "true"
+      ENABLE_OPENAI_API: "false"
+      OLLAMA_BASE_URLS: ${HOST_BRIDGE_URL:?Set the GPU host Tailscale endpoint}
+      OLLAMA_API_CONFIGS: '{"0":{"enable":true,"key":"${BRIDGE_TOKEN:?Generate a bridge token}","connection_type":"external"}}'
+      DEFAULT_MODELS: "leo-gpt-oss:20b"
+      DEFAULT_LOCALE: "zh-CN"
+      OFFLINE_MODE: "true"
+      ENABLE_COMMUNITY_SHARING: "false"
+      ENABLE_CODE_EXECUTION: "false"
+      ENABLE_CODE_INTERPRETER: "false"
+      ENABLE_WEB_SEARCH: "false"
+      RAG_EMBEDDING_ENGINE: "ollama"
+      RAG_OLLAMA_BASE_URL: ${HOST_BRIDGE_URL}
+      AIOHTTP_CLIENT_TIMEOUT: "600"
+      AIOHTTP_CLIENT_TIMEOUT_MODEL_LIST: "15"
+      UVICORN_WORKERS: "1"
+      ANONYMIZED_TELEMETRY: "false"
+      SCARF_NO_ANALYTICS: "true"
+      DO_NOT_TRACK: "true"
+    volumes:
+      - ./data:/app/backend/data
+      - ./frontend/index.html:/app/build/index.html:ro
+      - ./frontend/main.py:/app/backend/open_webui/main.py:ro
+    mem_limit: 768m
+    cpus: 1.0
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      start_period: 90s
+      retries: 3

@@ -1,0 +1,48 @@
+# Dedicated listener; retains the existing server's 443 routes.
+https://43.172.70.56:9444 {
+    tls {
+        issuer acme {
+            profile shortlived
+            disable_tlsalpn_challenge
+        }
+    }
+    request_body {
+        max_size 8MB
+    }
+    header {
+        X-Content-Type-Options nosniff
+        Referrer-Policy same-origin
+    }
+    @chat path /v1/chat/completions
+    handle @chat {
+        rewrite * /api/chat/completions
+        reverse_proxy 127.0.0.1:8788 {
+            flush_interval -1
+            transport http {
+                response_header_timeout 600s
+            }
+        }
+    }
+    @models path /v1/models
+    handle @models {
+        rewrite * /api/models
+        reverse_proxy 127.0.0.1:8788
+    }
+    handle /v1/* {
+        respond "Unsupported OpenAI endpoint" 404
+    }
+    handle {
+        reverse_proxy 127.0.0.1:8788 {
+            flush_interval -1
+            transport http {
+                response_header_timeout 600s
+            }
+        }
+    }
+    log {
+        output file /var/log/caddy/leo-model-access.log {
+            roll_size 10MiB
+            roll_keep 3
+        }
+    }
+}
