@@ -2,6 +2,8 @@
 
 当前网页入口：`https://d.58nft.net:9449/`，已接入 Bifrost 应用列表。`https://d.58nft.net/` 首页归 Bifrost 门户；原域名 `/v1/*`、`/inference/v1/*` API 路由保留。原模型域名接管配置已移为 `deploy/model-domain.*.before-bifrost`，防止模型重部署覆盖门户首页。当前独立模型站点配置为 `deploy/model-domain.caddy`，owner 为 `leo-model-bridge`，仅使用端口 9449。下文保留此前验收记录，历史域名说明不代表当前首页归属。
 
+当前网页登录规则已更新为 [彩虹桥统一登录](WORKSPACE_SSO.md)。下文 2026-10-05 的独立密码与应用内创建用户说明仅为历史验收记录。
+
 验收时间：2026-10-05，Asia/Shanghai。
 
 ## 直接使用

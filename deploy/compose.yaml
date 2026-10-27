@@ -7,13 +7,19 @@ services:
     ports:
       - "127.0.0.1:${WEBUI_PORT:-8788}:8080"
     environment:
-      WEBUI_URL: ${WEBUI_URL:?Set the public HTTPS URL}
+      WEBUI_URL: ${WORKSPACE_WEBUI_URL:-https://d.58nft.net:9449}
       WEBUI_SECRET_KEY: ${WEBUI_SECRET_KEY:?Generate a secret}
       WEBUI_ADMIN_EMAIL: ${WEBUI_ADMIN_EMAIL:?Set the initial admin email}
       WEBUI_ADMIN_PASSWORD: ${WEBUI_ADMIN_PASSWORD:?Set the initial admin password}
       WEBUI_ADMIN_NAME: Leo
       WEBUI_AUTH: "true"
       ENABLE_SIGNUP: "false"
+      ENABLE_LOGIN_FORM: "false"
+      WEBUI_AUTH_TRUSTED_EMAIL_HEADER: "X-Workspace-Email"
+      WEBUI_AUTH_TRUSTED_NAME_HEADER: "X-Workspace-Name"
+      WEBUI_AUTH_TRUSTED_ROLE_HEADER: "X-Workspace-Role"
+      WEBUI_AUTH_SIGNOUT_REDIRECT_URL: "https://d.58nft.net/"
+      WORKSPACE_IDENTITY_URL: "https://d.58nft.net:9461/api/auth/workspace/verify"
       ENABLE_API_KEYS: "true"
       ENABLE_API_KEYS_ENDPOINT_RESTRICTIONS: "true"
       API_KEYS_ALLOWED_ENDPOINTS: "/api/models,/api/chat/completions"
@@ -38,8 +44,9 @@ services:
       DO_NOT_TRACK: "true"
     volumes:
       - ./data:/app/backend/data
-      - ./frontend/index.html:/app/build/index.html:ro
-      - ./frontend/main.py:/app/backend/open_webui/main.py:ro
+      - ./frontend/index.workspace.html:/app/build/index.html:ro
+      - ./frontend/main.workspace.py:/app/backend/open_webui/main.py:ro
+      - ./workspace_sso.py:/app/backend/workspace_sso.py:ro
     mem_limit: 768m
     cpus: 1.0
     logging:

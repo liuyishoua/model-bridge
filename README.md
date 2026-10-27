@@ -2,14 +2,16 @@
 
 [![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-orange)](LICENSE)
 
-云端模型网页和 API 入口，将独立的 Open WebUI 账号系统、Caddy HTTPS 路由与 GPU 主机连接起来。
+云端模型网页和 API 入口，通过彩虹桥统一账号、应用授权、Caddy HTTPS 路由连接 Open WebUI 与 GPU 主机。
 本仓库保存自有桥接、部署和验证代码；模型权重、聊天记录、账号密钥与第三方镜像不进入 Git。
 
 ## 架构
 
 浏览器 → Caddy → Open WebUI → GPU 主机认证网关 → Ollama。
 模型与 GPU 推理运行在你自己的主机，云端提供网页、认证和持久聊天历史。
-原有模型 API 与网页路径可独立配置，不要求使用 Bifrost 门户。
+网页由彩虹桥授权后自动登录各自的 Open WebUI 身份；现有模型 API 路径和专用 API Key 保留。账号密码、角色与应用使用权在彩虹桥管理。
+
+统一登录实现和验收见 [WORKSPACE_SSO.md](WORKSPACE_SSO.md)。
 
 ## 部署启动
 

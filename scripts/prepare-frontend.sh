@@ -15,15 +15,20 @@ python3 - <<'PY'
 from pathlib import Path
 source = Path('frontend/index.upstream.html').read_text(encoding='utf-8')
 assert source.count('</head>') == 1, 'Upstream HTML layout changed; review before deploying'
-script = '<script src="/leo-auth-redirect.js?v=1"></script>\n'
-Path('frontend/index.html').write_text(source.replace('</head>', script + '</head>'), encoding='utf-8')
+script = '<script src="/leo-auth-redirect.js?v=2"></script>\n'
+source = source.replace('</head>', script + '</head>')
+anchor_boot = 'Promise.all(['
+assert source.count(anchor_boot) == 1, 'Review upstream SPA startup before changing SSO bootstrap'
+source = source.replace(anchor_boot, 'window.workspaceReady.then(() => Promise.all([').replace(']).then(([kit, app]) => {', '])).then(([kit, app]) => {')
+Path('frontend/index.workspace.html').write_text(source, encoding='utf-8')
 # v0.11.4 initial-title context omits model, but memory review reads ctx['model'].
 # Keep this one-field compatibility fix explicit and fail if upstream changes.
 backend = Path('frontend/main.upstream.py').read_text(encoding='utf-8')
 anchor = 'title_ctx = {\n'
 assert backend.count(anchor) == 1, 'Upstream title context changed; review the compatibility fix'
 backend = backend.replace(anchor, anchor + "                            'model': model,\n")
+backend += '\nfrom workspace_sso import install as install_workspace_sso\ninstall_workspace_sso(app)\n'
 compile(backend, 'main.py', 'exec')
-Path('frontend/main.py').write_text(backend, encoding='utf-8')
+Path('frontend/main.workspace.py').write_text(backend, encoding='utf-8')
 PY
-chmod 644 frontend/index.html frontend/main.py
+chmod 644 frontend/index.workspace.html frontend/main.workspace.py
