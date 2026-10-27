@@ -1,5 +1,7 @@
 # model-bridge
 
+> 文档中的 example.com 域名、192.0.2.* 地址、/opt/operator 路径及 20000 段端口均为示例，请按实际部署配置替换。私有账号配置与运行数据不随源码提交。
+
 [![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-orange)](LICENSE)
 
 云端模型网页和 API 入口，通过彩虹桥统一账号、应用授权、Caddy HTTPS 路由连接 Open WebUI 与 GPU 主机。
@@ -40,7 +42,7 @@ sudo docker compose --env-file cloud.env -f compose.yaml up -d
 - `deploy/data/`：Open WebUI 用户与聊天历史。
 - `deploy/cloud.env`、`.runtime/`、`backups/`：私有凭据、状态与备份，忽略 Git。
 - 模型权重留在 GPU 主机；镜像通过 Docker 获取，不复制第三方应用源码到本仓库。
-- 备份、恢复和诊断见 [原部署说明](docs/operations-original.md)。
+- 备份、恢复和诊断见 原部署说明（本地资料）。
 
 ## 验证
 
@@ -65,3 +67,7 @@ python3 -m unittest discover -s test -p 'test_*.py'
 
 第三方代码、素材和依赖仍受其各自许可条件约束，来源与许可范围见
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。本声明不追溯改变第三方代码或此前已发布版本的许可。
+
+## 本地身份关联配置
+
+首次部署前将 `deploy/workspace-identities.example.json` 复制为 `deploy/workspace-identities.json`。空对象表示没有旧账号关联；历史用户映射只在本地填写。该私有配置不提交，业务源码与实际部署使用同一套。

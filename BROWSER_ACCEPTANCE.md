@@ -33,7 +33,7 @@ Open WebUI v0.11.4 默认给浏览器会话加入35个内置工具，工具说�
 D:\anaconda\python.exe scripts\cloud-admin.py --configure-chat
 D:\anaconda\python.exe scripts\run-browser-test.py
 # 域名接通后也可验证对应入口：
-D:\anaconda\python.exe scripts\run-browser-test.py --base https://d.58nft.net
+D:\anaconda\python.exe scripts\run-browser-test.py --base https://portal.example.com
 ```
 
 `run-browser-test.py` 在 leo-ubuntu 上使用固定版本的 [Playwright 官方 Docker 环境](https://playwright.dev/python/docs/docker)。首次需要下载浏览器镜像，后续复用。登录凭证只暂存为服务器权限600的独立文件，执行完成或失败后删除；报告与截图复制回本机 `artifacts/browser/<run-id>/`。测试会话保留供人工检查。
@@ -42,6 +42,6 @@ D:\anaconda\python.exe scripts\run-browser-test.py --base https://d.58nft.net
 
 ## 正式域名复验
 
-2026-10-05 09:00–09:03，用户同意将原 Bifrost 域名用途切换后，使用 `https://d.58nft.net` 重跑上述三组、六次真实网页交互，全部通过；三个会话刷新后仍有完整答案，无页面脚本异常。新域名的管理员成功会话为 [实际网页会话](https://d.58nft.net/c/68986694-0ab3-4f84-87e3-dab0c7db7630)。
+2026-10-05 09:00–09:03，用户同意将原 Bifrost 域名用途切换后，使用 `https://portal.example.com` 重跑上述三组、六次真实网页交互，全部通过；三个会话刷新后仍有完整答案，无页面脚本异常。新域名的管理员成功会话为 [实际网页会话](https://portal.example.com/c/68986694-0ab3-4f84-87e3-dab0c7db7630)。
 
-结果与截图位于 `artifacts/browser/20261005T090031-426d9818/`。同一新域名的 API 复验通过匿名401、普通用户管理接口403、模型列表、数学323以及58个SSE事件和 `[DONE]`；详见 `artifacts/smoke-test.json`。证书校验正常，原模型 IP 入口200，Bifrost 原 IP:9443 入口保留302登录跳转。
+结果与截图位于 `artifacts/browser/20261005T090031-426d9818/`。同一新域名的 API 复验通过匿名401、普通用户管理接口403、模型列表、数学323以及58个SSE事件和 `[DONE]`；详见 `artifacts/smoke-test.json`。证书校验正常，原模型 IP 入口200，Bifrost 原 IP:20029 入口保留302登录跳转。

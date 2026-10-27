@@ -1,6 +1,6 @@
 # 模型服务使用说明
 
-服务地址：[https://d.58nft.net](https://d.58nft.net)。可以从联网电脑、手机的浏览器打开，不需要安装 Ollama 或 Tailscale。
+服务地址：[https://portal.example.com](https://portal.example.com)。可以从联网电脑、手机的浏览器打开，不需要安装 Ollama 或 Tailscale。
 
 原 IP 入口 `https://43.172.70.56` 仍可使用。
 
@@ -19,7 +19,7 @@
 | 配置项 | 内容 |
 | --- | --- |
 | 接口类型 | OpenAI 兼容 Chat Completions |
-| Base URL | `https://d.58nft.net/v1` |
+| Base URL | `https://portal.example.com/v1` |
 | 模型 | `leo-gpt-oss:20b` |
 | API Key | 自己账号生成的 Key |
 
@@ -30,7 +30,7 @@ import os
 from openai import OpenAI
 
 client = OpenAI(
-    base_url="https://d.58nft.net/v1",
+    base_url="https://portal.example.com/v1",
     api_key=os.environ["LEO_API_KEY"],
 )
 response = client.chat.completions.create(
@@ -42,7 +42,7 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
-OpenAPI 描述：[https://d.58nft.net/openapi.json](https://d.58nft.net/openapi.json)。
+OpenAPI 描述：[https://portal.example.com/openapi.json](https://portal.example.com/openapi.json)。
 
 ## 使用条件
 

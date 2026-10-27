@@ -45,3 +45,7 @@ docs/previews/*production*
 deploy/*.before-bifrost
 deploy/*.owner
 deploy/model-route.caddy
+
+# Private operator configuration and local validation records
+/deploy/workspace-identities.json
+/docs/operations-original.md
