@@ -1,0 +1,14 @@
+    # Only fingerprinted build files are immutable; auth errors and APIs stay uncached.
+    @leo_model_immutable path /_app/immutable/*
+    encode @leo_model_immutable zstd gzip
+    header @leo_model_immutable Cache-Control "public, max-age=31536000, immutable" {
+        match {
+            status 200 304
+            header Content-Type text/javascript*
+            header Content-Type application/javascript*
+            header Content-Type text/css*
+            header Content-Type image/*
+            header Content-Type font/*
+            header Content-Type application/wasm*
+        }
+    }

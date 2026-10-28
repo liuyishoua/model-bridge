@@ -71,3 +71,7 @@ python3 -m unittest discover -s test -p 'test_*.py'
 ## 本地身份关联配置
 
 首次部署前将 `deploy/workspace-identities.example.json` 复制为 `deploy/workspace-identities.json`。空对象表示没有旧账号关联；历史用户映射只在本地填写。该私有配置不提交，业务源码与实际部署使用同一套。
+
+## 原生前端缓存
+
+`deploy/frontend-cache.caddy` 为带内容指纹的 `/_app/immutable/` 脚本、样式等资源启用压缩与长期缓存，仅处理成功的静态响应。将该片段导入模型网页的代理处理块；保留原有统一身份校验。HTML、登录失败和聊天 API 不适用该缓存策略。
